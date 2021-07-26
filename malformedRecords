@@ -1,0 +1,21 @@
+from pyspark.sql import SparkSession  
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, FloatType, TimestampType,DoubleType,DateType
+
+spark = SparkSession.builder.appName("SchemaValidation").master("local").getOrCreate()
+
+schemas = StructType([\
+    StructField("ID", StringType(), True),\
+    StructField("Name", StringType(), True),\
+    StructField("Age", IntegerType(), True),\
+     StructField("Dob", TimestampType(), True)])
+
+valid_data = spark.read.format("csv").schema(schemas).option("mode","DROPMALFORMED").load("emp1.txt")
+
+all_data = spark.read.format("csv").schema(schemas).load("emp1.txt")
+ #date_udf("Dob")
+valid_data.show()
+
+all_data.show()
+
+rejectedDF = all_data.exceptAll(valid_data)
+rejectedDF.show()
