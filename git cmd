@@ -1,0 +1,8 @@
+Git pull origin master
+Git checkout -b new_branch
+Git add .
+Git commit -m "new changes"
+Git push origin "new_branch"
+Git checkout master
+Git merge --no-ff new_branch
+Git push origin master
